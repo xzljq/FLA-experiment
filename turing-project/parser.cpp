@@ -52,7 +52,7 @@ void parser(string tm)
         }
         else if(buf[0]=='#'&&buf[1]=='q'&&buf[2]=='0')
         {
-            buf.erase(0,5);
+            buf.erase(0,6);
             q0=buf;
         }
         else if(buf[0]=='#'&&buf[1]=='B')
