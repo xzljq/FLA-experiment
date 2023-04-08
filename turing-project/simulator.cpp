@@ -14,6 +14,7 @@ extern vector<string> F;//终结状态集
 extern int N;//纸带数
 extern vector<transfer> delta;//
 extern bool arg_v;
+extern bool arg_s;
 
 int step=0;
 string cur_state;
@@ -32,18 +33,24 @@ void simulate(string input)
     lefts.resize(N);
     rights.resize(N);
 
+    if(input.size()==0)
+    {
+        tapes[0][0]='_';
+    }
     for(int i=0;i<input.size();i++)
     {
         tapes[0][i]=input[i];
     }
-    rights[0]=input.size()-1;
+
+
+    rights[0]=(input.size()==0?0:input.size()-1);
     for(int i=1;i<N;i++)
     {
         tapes[i][0]='_';
     }
     while(1)
     {
-
+        if(arg_s) sleep(1);
         if(arg_v) print_TM();
         string cur_symbols;
         for(int i=0;i<N;i++)
@@ -68,9 +75,9 @@ void simulate(string input)
         cur_state=it->new_state;
         for(int i=0;i<N;i++)
         {
-            if(tapes[i][heads[i]]=='*' && it->new_symbols[i]=='*')
+            if(it->old_symbols[i]=='*' && it->new_symbols[i]=='*')
             {
-                continue;
+                
             }
             else
             {
@@ -91,6 +98,10 @@ void simulate(string input)
                     {
                         rights[i]--;
                     }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             else if(it->direction[i]=='r')
@@ -108,6 +119,10 @@ void simulate(string input)
                     {
                         lefts[i]++;
                     }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             else
@@ -124,15 +139,36 @@ void simulate(string input)
     {
         res+=tapes[0][i];
     }
-    cout<<res<<endl;
-    cout<<"==================== END ===================="<<endl;
+    for(int i=res.size()-1;i>=0;i--)
+    {
+        if(res[i]=='_')
+        {
+            res.erase(i,1);
+        }
+        else
+            break;
+    }
+    for(int i=0;i<res.size();i++)
+    {
+        if(res[i]=='_')
+        {
+            res.erase(i,1);
+            i--;
+        }
+        else
+            break;
+    }
+    if(arg_v) cout<<"Result: "<<res<<endl;
+    else cout<<res<<endl;
+
+    if(arg_v) cout<<"==================== END ===================="<<endl;
 }
 
 bool symbols_cmp(string pattern,string cur)
 {
     for(int i=0;i<pattern.size();i++)
     {
-        if(pattern[i]=='*')
+        if(pattern[i]=='*'&&cur[i]!='_')//该符号用于匹配除空格符号'_'外的任意符号
         {
             continue;
         }
@@ -166,24 +202,24 @@ void check_input(string input)
     }
     if(arg_v)
     {
-        cerr<<"Input: "<<input<<endl;
-        cerr<<"==================== RUN ===================="<<endl;
+        cout<<"Input: "<<input<<endl;
+        cout<<"==================== RUN ===================="<<endl;
     }
 }
 
 void print_TM()
 {
-    cout<<"Step\t: "<<step<<endl;
-    cout<<"State\t: "<<cur_state<<endl;
+    cout<<"Step   : "<<step<<endl;
+    cout<<"State  : "<<cur_state<<endl;
     for(int i=0;i<N;i++)
     {
-        cout<<"Index"<<i<<"\t:";
+        cout<<"Index"<<i<<" :";
         for(int j=lefts[i];j<=rights[i];j++)
         {
             cout<<" "<<(j>0?j:-j);
         }
         cout<<endl;
-        cout<<"Tape"<<i<<"\t:";
+        cout<<"Tape"<<i<<"  :";
         for(int j=lefts[i];j<=rights[i];j++)
         {
             cout<<" "<<tapes[i][j];
@@ -193,7 +229,7 @@ void print_TM()
             }
         }
         cout<<endl;
-        cout<<"Head"<<i<<"\t:";
+        cout<<"Head"<<i<<"  :";
         for(int j=lefts[i];j<=rights[i];j++)
         {
             if(j==heads[i])

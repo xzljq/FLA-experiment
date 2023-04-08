@@ -1,0 +1,3 @@
+/home/ljq/Desktop/FLA/CMakeFiles/rebuild_cache.dir
+/home/ljq/Desktop/FLA/CMakeFiles/edit_cache.dir
+/home/ljq/Desktop/FLA/CMakeFiles/turing.dir

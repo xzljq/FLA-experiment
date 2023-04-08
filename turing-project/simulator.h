@@ -8,6 +8,7 @@
 #include <map>
 #include <algorithm>
 #include <string>
+#include <unistd.h>
 using namespace std;
 void simulate(string input);
 bool symbols_cmp(string a,string b);

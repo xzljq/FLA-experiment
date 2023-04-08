@@ -22,7 +22,7 @@ void parser(string tm)
 	}
 
     ifstream ifs;
-    ifs.open("../turing-project/"+tm, ios::in);
+    ifs.open(tm, ios::in);
     if (!ifs.is_open())
     {
         cerr << "TM file open failed" << endl;
@@ -90,7 +90,7 @@ void parser(string tm)
         else
         {
             cerr<<"syntax error"<<endl;
-            if(arg_v) cerr<<"TM program uncorrect format"<<endl;
+            if(arg_v) cerr<<buf<<":TM program uncorrect format"<<endl;
             exit(6);
         }
 	}
@@ -107,6 +107,26 @@ void remove_comment(string& buf)
 void Q_parse(string buf)
 {
     buf.erase(0,5);
+
+    //check brace {} 
+    regex check_brace("\\{(.*)\\}$");
+    smatch res;
+    if(!regex_match(buf,check_brace))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[Q]:brace do not match"<<endl;
+        exit(11);
+    }
+
+    //check comma ,
+    regex check_comma("(\\w+)( )+(\\w+)");
+    if(regex_search(buf,check_comma))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[Q]:lack of comma"<<endl;
+        exit(12);
+    }
+    
     regex regexStr("(\\w+)");
     auto words_begin = sregex_iterator(buf.begin(), buf.end(), regexStr);
     auto words_end = sregex_iterator();
@@ -116,12 +136,31 @@ void Q_parse(string buf)
         string match_str = match.str(); 
         Q.push_back(match_str);
     } 
-    
 }
 
 void S_parse(string buf)
 {
     buf.erase(0,5);
+
+    //check brace {} 
+    regex check_brace("\\{(.*)\\}$");
+    smatch res;
+    if(!regex_match(buf,check_brace))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[S]:brace do not match"<<endl;
+        exit(11);
+    }
+
+    //check comma ,
+    regex check_comma("[^\\s,;\\{\\}\\*_]( )+[^\\s,;\\{\\}\\*_]");
+    if(regex_search(buf,check_comma))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[S]:lack of comma"<<endl;
+        exit(12);
+    }
+
     regex regexStr("[^\\s,;\\{\\}\\*_]");
     auto words_begin = sregex_iterator(buf.begin(), buf.end(), regexStr);
     auto words_end = sregex_iterator();
@@ -137,6 +176,26 @@ void S_parse(string buf)
 void G_parse(string buf)
 {
     buf.erase(0,5);
+
+    //check brace {} 
+    regex check_brace("\\{(.*)\\}$");
+    smatch res;
+    if(!regex_match(buf,check_brace))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[G]:brace do not match"<<endl;
+        exit(11);
+    }
+
+    //check comma ,
+    regex check_comma("[^\\s,;\\{\\}\\*]( )+[^\\s,;\\{\\}\\*]");
+    if(regex_search(buf,check_comma))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[G]:lack of comma"<<endl;
+        exit(12);
+    }
+
     regex regexStr("[^\\s,;\\{\\}\\*]");
     auto words_begin = sregex_iterator(buf.begin(), buf.end(), regexStr);
     auto words_end = sregex_iterator();
@@ -152,6 +211,26 @@ void G_parse(string buf)
 void F_parse(string buf)
 {
     buf.erase(0,5);
+
+    //check brace {} 
+    regex check_brace("\\{(.*)\\}$");
+    smatch res;
+    if(!regex_match(buf,check_brace))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[F]:brace do not match"<<endl;
+        exit(11);
+    }
+
+    //check comma ,
+    regex check_comma("(\\w+)( )+(\\w+)");
+    if(regex_search(buf,check_comma))
+    {
+        cerr<<"syntax error"<<endl;
+        if(arg_v==1) cerr<<"[F]:lack of comma"<<endl;
+        exit(12);
+    }
+
     regex regexStr("(\\w+)");
     auto words_begin = sregex_iterator(buf.begin(), buf.end(), regexStr);
     auto words_end = sregex_iterator();

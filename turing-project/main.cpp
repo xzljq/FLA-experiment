@@ -9,6 +9,7 @@ using namespace std;
 
 string TM, input;
 bool arg_v;
+bool arg_s;
 
 int main(int argc, char* argv[])
 {
@@ -26,6 +27,10 @@ int main(int argc, char* argv[])
 			if(temp=="-v"||temp=="--verbose")
 			{
 				arg_v=true;
+			}
+			else if(temp=="-s"||temp=="--slow")
+			{
+				arg_s=true;
 			}
 			else if(temp=="-h"||temp=="--help")
 			{
